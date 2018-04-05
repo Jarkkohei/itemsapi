@@ -35,6 +35,24 @@
     </nav>
 
     <div class="container">
+        <h1>Add Item</h1>
+
+        <form id="itemForm">
+            <div class="form-group">
+                <label>Text </label>
+                <input type="text" id="text" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label>Body </label>
+                <textarea id="body" class="form-control"></textarea>
+            </div>
+
+            <input type="submit" value="submit" class="btn btn-dark">
+        </form>
+
+        <hr>
+
         <ul id="items" class="list-group"></ul>
     </div>
 
@@ -47,6 +65,31 @@
     <script>
         $(document).ready(function() {
             getItems();
+
+            //  Submit event
+            $('#itemForm').on('submit', function(e) {
+                e.preventDefault();
+
+                let text = $('#text').val();
+                let body = $('#body').val();
+
+                addItem(text, body);
+            });
+
+            //  Insert items using API
+            function addItem(text, body) {
+                $.ajax({
+                    method: 'POST',
+                    url: 'http://localhost:8000/api/items',
+                    data: {
+                        text: text,
+                        body: body
+                    }
+                }).done(function(item) {
+                    alert('Item # '+item.id+' added');
+                    location.reload();
+                });
+            }
 
 
             //  Get Items from API
